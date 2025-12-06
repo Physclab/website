@@ -37,6 +37,7 @@
         a { text-decoration: none; color: inherit; }
         ul { list-style: none; }
         
+        /* --- NAVBAR --- */
         .navbar {
             position: fixed;
             top: 0;
@@ -52,7 +53,9 @@
             transition: transform 0.3s ease;
         }
 
-        .logo { font-size: 1.5rem; font-weight: 700; letter-spacing: -1px; }
+        .logo { font-size: 1.5rem; font-weight: 700; letter-spacing: -1px; z-index: 102; }
+        
+        /* Desktop Nav */
         .nav-links { display: flex; gap: 40px; }
         .nav-links a { font-size: 0.9rem; font-weight: 500; color: var(--text-muted); transition: color 0.3s; }
         .nav-links a:hover { color: var(--text-main); }
@@ -67,14 +70,53 @@
         }
         .cta-btn:hover { transform: scale(1.05); }
 
-        .hero {
+        /* Mobile Nav Toggle & Menu */
+        .menu-toggle {
+            display: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            z-index: 102;
+        }
+
+        .mobile-menu-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
             height: 100vh;
+            background: white;
+            z-index: 101;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            gap: 40px;
+            transform: translateY(-100%);
+            transition: transform 0.5s cubic-bezier(0.77, 0, 0.175, 1);
+            opacity: 0;
+        }
+
+        .mobile-menu-overlay.active {
+            transform: translateY(0);
+            opacity: 1;
+        }
+
+        .mobile-menu-overlay a {
+            font-size: 2rem;
+            font-weight: 500;
+            color: var(--text-main);
+        }
+
+        /* --- HERO --- */
+        .hero {
+            /* Usamos dvh para móviles */
+            min-height: 100dvh;
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
             text-align: center;
-            padding: 0 20px;
+            padding: 100px 20px 40px 20px;
             position: relative;
         }
 
@@ -92,9 +134,9 @@
         }
 
         .hero h1 {
-            font-size: clamp(3rem, 8vw, 6rem); 
+            font-size: clamp(2.5rem, 8vw, 6rem); 
             line-height: 1;
-            letter-spacing: -3px;
+            letter-spacing: -2px;
             margin-bottom: 30px;
             clip-path: polygon(0 0, 100% 0, 100% 100%, 0% 100%); 
         }
@@ -106,7 +148,7 @@
         }
 
         .hero p {
-            font-size: 1.2rem;
+            font-size: clamp(1rem, 2vw, 1.2rem);
             color: var(--text-muted);
             max-width: 600px;
             margin-bottom: 40px;
@@ -119,6 +161,8 @@
             transform: translateY(20px);
             display: flex;
             gap: 20px;
+            flex-wrap: wrap;
+            justify-content: center;
         }
 
         .btn-outline {
@@ -130,28 +174,24 @@
         }
         .btn-outline:hover { background: #f5f5f5; border-color: #333; }
 
+        /* --- SERVICES --- */
         .services {
             padding: 100px 40px;
             max-width: 1400px;
             margin: 0 auto;
         }
 
-        .section-header { 
-            margin-bottom: 80px;
-        }
-        .section-header h2 { 
-            font-size: 3rem; 
-            letter-spacing: -2px;
-        }
+        .section-header { margin-bottom: 60px; }
+        .section-header h2 { font-size: clamp(2rem, 5vw, 3rem); letter-spacing: -2px; }
 
         .services-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 40px;
+            gap: 30px;
         }
 
         .card {
-            padding: 40px;
+            padding: 30px;
             border: 1px solid var(--border-color);
             border-radius: 20px;
             background: #fff;
@@ -160,7 +200,7 @@
             opacity: 1;
             transform: translateY(0);
         }
-
+        
         .card:hover {
             border-color: #aaa;
             box-shadow: 0 20px 40px rgba(0,0,0,0.05);
@@ -177,24 +217,17 @@
         }
         .card p { color: var(--text-muted); line-height: 1.6; }
 
+        /* --- CAROUSEL --- */
         .carousel-section {
-            padding: 120px 40px;
+            padding: 100px 40px;
             max-width: 1400px;
             margin: 0 auto;
             position: relative;
             overflow: hidden;
         }
 
-        .carousel-header {
-            text-align: center;
-            margin-bottom: 80px;
-        }
-
-        .carousel-header h2 {
-            font-size: 3rem;
-            letter-spacing: -2px;
-            margin-bottom: 20px;
-        }
+        .carousel-header { text-align: center; margin-bottom: 60px; }
+        .carousel-header h2 { font-size: clamp(2rem, 5vw, 3rem); letter-spacing: -2px; margin-bottom: 20px; }
 
         .carousel-container {
             position: relative;
@@ -228,8 +261,10 @@
         .carousel-slide {
             position: absolute;
             width: 450px;
+            /* Máximo ancho para pantallas pequeñas */
+            max-width: 85vw; 
             height: 480px;
-            padding: 50px 40px;
+            padding: 40px 30px;
             background: linear-gradient(135deg, #f8f9fa 0%, #ffffff 100%);
             border: 2px solid var(--border-color);
             border-radius: 30px;
@@ -237,6 +272,18 @@
             display: flex;
             flex-direction: column;
             box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+            /* Centrado por defecto en caso de fallo JS */
+            left: 50%;
+            top: 50%;
+            margin-left: -225px; /* Mitad del ancho desktop */
+            margin-top: -240px;
+        }
+
+        /* Responsive width reset for margin calc */
+        @media(max-width: 768px){
+            .carousel-slide {
+                margin-left: -42.5vw; /* Mitad del max-width mobile */
+            }
         }
 
         .carousel-slide {
@@ -275,13 +322,13 @@
             display: flex;
             align-items: center;
             gap: 20px;
-            margin-bottom: 30px;
-            padding-bottom: 25px;
+            margin-bottom: 25px;
+            padding-bottom: 20px;
             border-bottom: 2px solid var(--border-color);
         }
 
         .carousel-icon {
-            font-size: 3.5rem;
+            font-size: 2.5rem;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -292,16 +339,17 @@
             font-size: 1rem;
             font-family: 'Press Start 2P', cursive;
             letter-spacing: 1px;
-            line-height: 1.6;
+            line-height: 1.4;
             color: var(--text-main);
             flex: 1;
         }
 
         .carousel-slide p {
-            font-size: 1.05rem;
-            line-height: 1.8;
+            font-size: 1rem;
+            line-height: 1.7;
             color: var(--text-muted);
             flex: 1;
+            overflow-y: auto; /* Scroll si el texto es muy largo en móvil */
         }
 
         .carousel-nav {
@@ -352,12 +400,9 @@
             transform: scale(1.3);
         }
 
-        .dot:hover {
-            background: #666;
-        }
-
+        /* --- FOOTER --- */
         footer {
-            padding: 80px 40px;
+            padding: 80px 20px;
             border-top: 1px solid var(--border-color);
             text-align: center;
         }
@@ -380,6 +425,7 @@
             transition: all 0.3s ease;
             display: inline-flex;
             align-items: center;
+            justify-content: center;
             gap: 10px;
         }
         
@@ -410,51 +456,11 @@
         }
         
         footer p.email {
-            font-size: 1.2rem;
+            font-size: 1.1rem;
             color: var(--text-muted);
             font-weight: 500;
         }
 
-        @media (max-width: 768px) {
-            .nav-links { display: none; }
-            .hero { align-items: flex-start; text-align: left; }
-            .hero h1 { font-size: 3.5rem; }
-            .services { padding: 60px 20px; }
-            .hero-btns { flex-direction: column; }
-            .carousel-section { padding: 80px 20px; }
-            .carousel-container { 
-                padding: 0 20px; 
-                height: 550px;
-            }
-            .carousel-slide { 
-                width: 320px;
-                height: 500px;
-                padding: 35px 25px; 
-            }
-            .carousel-slide.prev,
-            .carousel-slide.next {
-                transform: translateX(-100%) scale(0.8);
-                opacity: 0.3;
-            }
-            .carousel-slide.next {
-                transform: translateX(100%) scale(0.8);
-            }
-            .carousel-nav { width: 40px; height: 40px; }
-            .carousel-slide h3 { font-size: 0.85rem; }
-            .carousel-icon { font-size: 2.5rem; }
-            .contact-buttons { 
-                flex-direction: column;
-                gap: 15px;
-            }
-            .contact-btn {
-                width: 100%;
-                max-width: 300px;
-            }
-            .desktop-cta {
-                display: none !important;
-        }
-        }
-        
         .blur-blob {
             position: absolute;
             width: 600px;
@@ -466,30 +472,97 @@
             z-index: -1;
             pointer-events: none;
         }
-        @media(max-width:768px){
-        .hero h1{
-            font-size: clamp(2.2rem, 9vw, 3rem);
-            letter-spacing:-1px;
-        }
-        .hero p{
-            font-size:1rem;
-            max-width:90%;
-        }
-    }
 
+        /* --- MEDIA QUERIES --- */
+        @media (max-width: 900px) {
+            .nav-links, .cta-btn.desktop-only { display: none; }
+            .menu-toggle { display: block; }
+            .navbar { padding: 20px; }
+            
+            .hero { align-items: center; text-align: center; } /* Mantener centrado en tablet */
+        }
 
+        @media (max-width: 768px) {
+            .hero { 
+                align-items: flex-start; 
+                text-align: left; 
+                padding-top: 120px;
+            }
+            .hero h1 { font-size: 2.8rem; margin-bottom: 20px;}
+            .hero p { font-size: 1rem; margin-bottom: 30px; }
+            
+            .hero-btns { 
+                flex-direction: column; 
+                width: 100%;
+            }
+            .hero-btns a {
+                width: 100%;
+                text-align: center;
+            }
+
+            .services { padding: 60px 20px; }
+            
+            .carousel-section { padding: 80px 20px; }
+            .carousel-container { 
+                padding: 0; /* Quitar padding lateral para dar espacio a la card */
+                height: 550px;
+            }
+            
+            .carousel-nav {
+                width: 40px; height: 40px;
+                background: rgba(255,255,255,0.8);
+            }
+            .carousel-nav.prev { left: -10px; }
+            .carousel-nav.next { right: -10px; }
+
+            /* Ajustes para que las tarjetas prev/next no molesten visualmente en móvil */
+            .carousel-slide.prev,
+            .carousel-slide.next {
+                opacity: 0; /* Ocultar las adyacentes en móvil para limpieza visual */
+            }
+            
+            .contact-buttons { 
+                flex-direction: column;
+                gap: 15px;
+                width: 100%;
+            }
+            .contact-btn {
+                width: 100%;
+            }
+            
+            .blur-blob {
+                width: 300px;
+                height: 300px;
+            }
+        }
     </style>
 </head>
 <body>
 
     <nav class="navbar">
         <div class="logo">PHYSCLAB.</div>
+        
         <div class="nav-links">
             <a href="#servicios">Servicios</a>
             <a href="#agencia">Agencia</a>
             <a href="#contacto">Contacto</a>
         </div>
+        <a href="#contacto" class="cta-btn desktop-only">Empezar Proyecto</a>
+
+        <div class="menu-toggle" id="menuToggle">
+            <i class="ri-menu-3-line"></i>
+        </div>
     </nav>
+
+    <div class="mobile-menu-overlay" id="mobileMenu">
+        <a href="#servicios" class="mobile-link">Servicios</a>
+        <a href="#soluciones" class="mobile-link">Soluciones</a>
+        <a href="#contacto" class="mobile-link">Contacto</a>
+        <a href="https://cal.com/physco/asesoria?duration=30" class="cta-btn">Empezar Proyecto</a>
+        <div class="close-menu" style="position:absolute; top:30px; right:30px; cursor:pointer; font-size:1.5rem;">
+            <i class="ri-close-line"></i>
+        </div>
+    </div>
 
     <main>
         <section class="hero">
@@ -564,7 +637,7 @@
                                 </div>
                                 <h3>Automatiza tus Ventas</h3>
                             </div>
-                            <p>Convierte tus mensajes en ventas automáticas. Nuestro chatbot inteligente atiende tu Instagram, web y otros canales 24/7, responde a tus clientes, muestra tu inventario y cierra ventas de forma automática. Cada venta y entrega queda registrada en tu Google Calendar para que tengas el control total sin mover un dedo.</p>
+                            <p>Convierte tus mensajes en ventas automáticas. Nuestro chatbot inteligente atiende tu Instagram, web y otros canales 24/7, responde a tus clientes, muestra tu inventario y cierra ventas de forma automática.</p>
                         </div>
 
                         <div class="carousel-slide prev">
@@ -574,7 +647,7 @@
                                 </div>
                                 <h3>Aplicación Personalizada</h3>
                             </div>
-                            <p>Desarrollamos soluciones digitales totalmente personalizadas. Creamos sistemas, programas y bots automatizados diseñados específicamente para resolver los problemas reales de tu negocio y automatizar tareas clave. Analizamos tu necesidad, programamos la solución a tu medida y optimizamos tus procesos para que ahorres tiempo.</p>
+                            <p>Desarrollamos soluciones digitales totalmente personalizadas. Creamos sistemas, programas y bots automatizados diseñados específicamente para resolver los problemas reales de tu negocio y automatizar tareas.</p>
                         </div>
                     </div>
                 </div>
@@ -632,6 +705,7 @@
 
             gsap.registerPlugin(ScrollTrigger); 
 
+            // Hero animations
             const tl = gsap.timeline({ defaults: { ease: "power4.out" } });
 
             tl.to(".hero-tag", { opacity: 1, duration: 1, delay: 0.3 })
@@ -667,11 +741,17 @@
                 ease: "none"
             });
 
+            // Smooth Scroll for Anchors
             document.querySelectorAll('a[href^="#"]').forEach(anchor => {
                 anchor.addEventListener('click', function (e) {
+                    if(this.getAttribute('href').startsWith('#tally')) return; // Ignore tally
+                    
                     e.preventDefault();
                     const target = document.querySelector(this.getAttribute('href'));
                     if (target) {
+                        // Close mobile menu if open
+                        toggleMenu(false);
+                        
                         lenis.scrollTo(target, {
                             offset: -80,
                             duration: 1.5
@@ -680,8 +760,34 @@
                 });
             });
 
+            // Mobile Menu Logic
+            const menuToggle = document.getElementById('menuToggle');
+            const mobileMenu = document.getElementById('mobileMenu');
+            const closeMenu = document.querySelector('.close-menu');
+            
+            function toggleMenu(show) {
+                if (show) {
+                    mobileMenu.classList.add('active');
+                    document.body.style.overflow = 'hidden'; // Prevent scrolling
+                    lenis.stop(); // Stop Lenis scroll
+                } else {
+                    mobileMenu.classList.remove('active');
+                    document.body.style.overflow = '';
+                    lenis.start(); // Start Lenis scroll
+                }
+            }
+
+            menuToggle.addEventListener('click', () => toggleMenu(true));
+            closeMenu.addEventListener('click', () => toggleMenu(false));
+            
+            // Close menu when clicking links inside
+            document.querySelectorAll('.mobile-link').forEach(link => {
+                link.addEventListener('click', () => toggleMenu(false));
+            });
+
         });
 
+        // Carousel Logic
         let currentSlide = 0;
         const totalSlides = 3;
         let autoplayInterval;
@@ -739,7 +845,4 @@
         });
     </script>
 </body>
-
 </html>
-
-
